@@ -2,13 +2,19 @@ version: 2
 jobs:
   build:
     docker:
-      - image: debian:stretch
+      - image: circleci/node:8.10
+
+    working_directory: ~/repo
+
     steps:
       - checkout
-      - run:
-          name: Greeting
-          command: echo Hello, world.
-      - run:
-          name: Print the Current Time
-          command: date
 
+    # install python and awscli
+      - run:
+          name: Install dependencies
+          working_directory: /
+          command: sudo apt-get -y -qq install awscli
+
+      - run:
+          name: Deploy application
+          command: aws s3 cp emily.html s3://iwc-ci-demo
